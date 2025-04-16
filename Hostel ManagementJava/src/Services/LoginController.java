@@ -1,5 +1,7 @@
 package Services;
 import DAO.StudentOperations;
+import Entities.Student;
+import Entities.Warden;
 import UserInterface.LoginUI;
 import UserInterface.StudentUI;
 import UserInterface.WardenUI;
@@ -22,11 +24,18 @@ public class LoginController {
             if (result.equals("student")) {
                 System.out.println("Student Login Successful !");
                 StudentUI SU = new StudentUI();
+                new Student().setId(username);
+                new Student().setStudentPass(password); // saving session info
+
+
                 loginUiFrame.dispose();  // This will now work because loginUiFrame is properly set
                 SU.showStudentUi();
             } else if (result.equals("warden")) {
                 System.out.println("Warden Login successful!!");
                 WardenUI W= new WardenUI();
+                new Warden().setId(username);
+                new Warden().setWardenPass(password); // saving session info
+
 
                 loginUiFrame.dispose();
                 W.showWardenUi();

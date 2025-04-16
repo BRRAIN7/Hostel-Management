@@ -11,7 +11,7 @@ public class StudentOperations {
         try (Connection con = db.connect()) { // Auto-closing connection
 
             // Check in student table
-            String studentQuery = "SELECT * FROM student WHERE Name = ? AND Student_pass = ?";
+            String studentQuery = "SELECT * FROM student WHERE Student_ID = ? AND Student_pass = ?";
             try (PreparedStatement pstmt = con.prepareStatement(studentQuery)) {
                 pstmt.setString(1, username);
                 pstmt.setString(2, password);
@@ -23,7 +23,7 @@ public class StudentOperations {
             }
 
             // Check in warden table
-            String wardenQuery = "SELECT * FROM warden WHERE Warden_name = ? AND Warden_pass = ?";
+            String wardenQuery = "SELECT * FROM warden WHERE Warden_ID = ? AND Warden_pass = ?";
             try (PreparedStatement pstmt = con.prepareStatement(wardenQuery)) {
                 pstmt.setString(1, username);
                 pstmt.setString(2, password);
@@ -38,14 +38,6 @@ public class StudentOperations {
         return "invalid"; // No match found
     }
 
-    public static boolean addNewStudentDAO(Student S) throws SQLException,ClassNotFoundException{
-        DBController db = new DBController();
-        Connection con=db.connect();
 
-        String str= "Insert into student(Name,student_id,Student_Gender,DOB,Admission_date,Contact,Address) values (?,?,?,?,?,?,?)";
-        PreparedStatement ps=con.prepareStatement(str);
-        ps.setString(1,S.getName());
-        ps.setString(2,S.getId())
 
-    }
 }

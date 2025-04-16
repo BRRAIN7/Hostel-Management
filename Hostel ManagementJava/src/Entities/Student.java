@@ -1,34 +1,32 @@
 package Entities;
-public class Student {
-    // Fields (Attributes) of the Student class
-    private String name;
+
+import java.time.LocalDate;
+import java.time.Period;
+
+public class Student extends User {
     private String id;
     private String gender;
-    private String dob; // Date of Birth
+    private String dob;
     private String admissionDate;
-    private String contactNumber;
-    private String address;
+    private int age; // New field for age
+    private String studentPass; // New field for student password
+    private String roomno;
 
-    // Constructor to initialize all fields
-    public Student(String name, String id, String gender, String dob, String admissionDate, String contactNumber, String address) {
-        this.name = name;
+    // Constructor using super() for shared fields
+    public Student(String name, String id, String gender, String dob, String admissionDate,
+                   String contactNumber, String address, String studentPass,String roomno) {
+        super(name, contactNumber, address); // Call the parent constructor
         this.id = id;
         this.gender = gender;
         this.dob = dob;
         this.admissionDate = admissionDate;
-        this.contactNumber = contactNumber;
-        this.address = address;
+        this.age = calculateAge(dob);  // Calculate age from DOB
+        this.studentPass = studentPass;
+        this.roomno=roomno;
     }
+    public Student(){}
 
-    // Getters and Setters for each field
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    // Getter and Setter for id
     public String getId() {
         return id;
     }
@@ -36,7 +34,14 @@ public class Student {
     public void setId(String id) {
         this.id = id;
     }
+    public String getroomno(){
+        return roomno;
+    }
+    public void setrooomno(String roomno){
+        this.roomno=roomno;
+    }
 
+    // Getter and Setter for gender
     public String getGender() {
         return gender;
     }
@@ -45,14 +50,17 @@ public class Student {
         this.gender = gender;
     }
 
+    // Getter and Setter for dob
     public String getDob() {
         return dob;
     }
 
     public void setDob(String dob) {
         this.dob = dob;
+        this.age = calculateAge(dob);  // Recalculate age if DOB changes
     }
 
+    // Getter and Setter for admissionDate
     public String getAdmissionDate() {
         return admissionDate;
     }
@@ -61,28 +69,32 @@ public class Student {
         this.admissionDate = admissionDate;
     }
 
-    public String getContactNumber() {
-        return contactNumber;
+    // Getter and Setter for studentPass
+    public String getStudentPass() {
+        return studentPass;
     }
 
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setStudentPass(String studentPass) {
+        this.studentPass = studentPass;
     }
 
-    public String getAddress() {
-        return address;
+    // Getter for age (age is calculated dynamically from DOB)
+    public int getAge() {
+        return age;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    // Method to calculate age from DOB
+    private int calculateAge(String dob) {
+        LocalDate birthDate = LocalDate.parse(dob);
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthDate, currentDate).getYears();  // Calculate the years
     }
 
-    // Override toString method to display Student information easily
+    // Override toString method
     @Override
     public String toString() {
-        return "Student [name=" + name + ", id=" + id + ", gender=" + gender + ", dob=" + dob + ", admissionDate=" + admissionDate
-                + ", contactNumber=" + contactNumber + ", address=" + address + "]";
+        return "Student [name=" + name + ", id=" + id + ", gender=" + gender + ", dob=" + dob
+                + ", admissionDate=" + admissionDate + ", age=" + age + ", contactNumber=" + contactNumber
+                + ", address=" + address + ", studentPass=" + studentPass + "]";
     }
-
 }
-
