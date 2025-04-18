@@ -13,8 +13,8 @@ public class LoginController {
     private JFrame loginUiFrame;
 
     // Constructor that accepts JFrame
-    public LoginController(JFrame j){
-        this.loginUiFrame = j;
+    public LoginController(JFrame loginUiFrame) {
+        this.loginUiFrame = loginUiFrame;
     }
 
     public boolean authenticate(String username, String password){
@@ -23,19 +23,14 @@ public class LoginController {
             String result = SO.studentVerify(username, password);
             if (result.equals("student")) {
                 System.out.println("Student Login Successful !");
+                Session.setUser(username, "Student", password);
                 StudentUI SU = new StudentUI();
-                new Student().setId(username);
-                new Student().setStudentPass(password); // saving session info
-
-
                 loginUiFrame.dispose();  // This will now work because loginUiFrame is properly set
                 SU.showStudentUi();
             } else if (result.equals("warden")) {
                 System.out.println("Warden Login successful!!");
+                Session.setUser(username, "Warden", password);
                 WardenUI W= new WardenUI();
-                new Warden().setId(username);
-                new Warden().setWardenPass(password); // saving session info
-
 
                 loginUiFrame.dispose();
                 W.showWardenUi();

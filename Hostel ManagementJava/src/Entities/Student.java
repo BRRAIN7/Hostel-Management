@@ -8,13 +8,14 @@ public class Student extends User {
     private String gender;
     private String dob;
     private String admissionDate;
-    private int age; // New field for age
-    private String studentPass; // New field for student password
-    private String roomno;
+    private int age; // Field for age
+    private String studentPass; // Student password
+    private String roomno; // Current room number
+    private String newRoomNo; // New room number for room change
 
     // Constructor using super() for shared fields
     public Student(String name, String id, String gender, String dob, String admissionDate,
-                   String contactNumber, String address, String studentPass,String roomno) {
+                   String contactNumber, String address, String studentPass, String roomno) {
         super(name, contactNumber, address); // Call the parent constructor
         this.id = id;
         this.gender = gender;
@@ -22,9 +23,11 @@ public class Student extends User {
         this.admissionDate = admissionDate;
         this.age = calculateAge(dob);  // Calculate age from DOB
         this.studentPass = studentPass;
-        this.roomno=roomno;
+        this.roomno = roomno; // Set initial room number
     }
-    public Student(){}
+
+    // Default constructor
+    public Student() {}
 
     // Getter and Setter for id
     public String getId() {
@@ -34,11 +37,23 @@ public class Student extends User {
     public void setId(String id) {
         this.id = id;
     }
-    public String getroomno(){
+
+    // Getter and Setter for roomno (current room)
+    public String getroomno() {
         return roomno;
     }
-    public void setrooomno(String roomno){
-        this.roomno=roomno;
+
+    public void setroomno(String roomno) {
+        this.roomno = roomno;
+    }
+
+    // Getter and Setter for newRoomNo (room change)
+    public String getNewRoomNo() {
+        return newRoomNo;
+    }
+
+    public void setNewRoomNo(String newRoomNo) {
+        this.newRoomNo = newRoomNo;
     }
 
     // Getter and Setter for gender
