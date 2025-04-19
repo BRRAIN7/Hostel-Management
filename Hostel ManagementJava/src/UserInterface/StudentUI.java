@@ -6,6 +6,8 @@ package UserInterface;
 
 import Entities.Student;
 
+import javax.swing.*;
+
 /**
  *
  * @author karole
@@ -33,7 +35,7 @@ public class StudentUI extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1300, 700));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -97,7 +99,8 @@ public class StudentUI extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        ApplyOutpass ao= new ApplyOutpass();
+        ao.openApplyOutpass();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
