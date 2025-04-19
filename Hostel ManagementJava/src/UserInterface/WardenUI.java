@@ -332,7 +332,8 @@ public class WardenUI extends JFrame {
                         break;
                     case "Review Outpass":
                         System.out.println("Review Outpass button pressed");
-                        // Add your logic here
+                        ReviewOutpassUI Rv= new ReviewOutpassUI();
+                        Rv.reviewOutpass();
                         break;
                     case "Logout":
                         System.out.println("Logout button pressed");
