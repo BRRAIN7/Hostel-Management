@@ -245,6 +245,8 @@
 
 package UserInterface;
 
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -306,7 +308,8 @@ public class WardenUI extends JFrame {
                         break;
                     case "Update and delete Student":
                         System.out.println("Update and delete Student button pressed");
-                        UpdateAndDeleteStudentUI.openManageStudent();
+                        UpdateAndDeleteStudentUI ud = new UpdateAndDeleteStudentUI();
+                        ud.openManageStudent();
                         break;
                     case "Student Fees":
                         System.out.println("Student Fees button pressed");
@@ -324,7 +327,8 @@ public class WardenUI extends JFrame {
                         break;
                     case "Update and Delete Staff":
                         System.out.println("Update and Delete Staff button pressed");
-                        // Add your logic here
+                        UpdateAndDeleteStaffUI update= new UpdateAndDeleteStaffUI();
+                        update.openManageStaff();
                         break;
                     case "Review Complaints":
                         System.out.println("Review Complaints button pressed");
@@ -337,7 +341,6 @@ public class WardenUI extends JFrame {
                         break;
                     case "Logout":
                         System.out.println("Logout button pressed");
-                        // Add your logic here (like dispose(), redirect to login, etc.)
                         break;
                 }
             });

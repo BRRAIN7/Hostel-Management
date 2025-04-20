@@ -63,4 +63,48 @@ public class StaffOperations {
 
         return rowsAffected > 0; // Return true if row insertion was successful
     }
+    public Staff getStaffById(String staffId) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM staff WHERE Staff_ID = ?";
+        try (Connection con = DBController.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, staffId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Staff(
+                        rs.getString("Name"),
+                        rs.getString("Contact"),
+                        rs.getString("Address"),
+                        rs.getString("Email"),
+                        rs.getString("Staff_ID"),
+                        rs.getString("Role"),
+                        rs.getFloat("Salary")
+                );
+            }
+        }
+        return null;
+    }
+
+    public boolean updateStaff(Staff staff) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE staff SET Name=?, Role=?, Contact=?, Email=?, Address=?, Salary=? WHERE Staff_ID=?";
+        try (Connection con = DBController.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, staff.getName());
+            ps.setString(2, staff.getRole());
+            ps.setString(3, staff.getContactNumber());
+            ps.setString(4, staff.getEmail());
+            ps.setString(5, staff.getAddress());
+            ps.setDouble(6, staff.getSalary());
+            ps.setString(7, staff.getStaffId());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean deleteStaff(String staffId) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM staff WHERE Staff_ID = ?";
+        try (Connection con = DBController.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, staffId);
+            return ps.executeUpdate() > 0;
+        }
+    }
 }

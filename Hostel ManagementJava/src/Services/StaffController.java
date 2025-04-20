@@ -61,4 +61,30 @@ public class StaffController {
 
         return isSaved;  // Return the result of the database operation
     }
+    public static Staff searchStaff(String staffId) {
+        try {
+            return new StaffOperations().getStaffById(staffId);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean updateStaff(Staff staff) {
+        try {
+            return new StaffOperations().updateStaff(staff);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean deleteStaff(String staffId) {
+        try {
+            return new StaffOperations().deleteStaff(staffId);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
