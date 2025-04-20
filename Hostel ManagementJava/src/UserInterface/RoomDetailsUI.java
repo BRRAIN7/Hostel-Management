@@ -305,7 +305,7 @@ public class RoomDetailsUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Load background image
-        URL imageUrl = getClass().getResource("/UI/h6.jpg");
+        URL imageUrl = getClass().getResource("/UserInterface/h6.jpg");
         ImageIcon backgroundIcon = (imageUrl != null) ? new ImageIcon(imageUrl) : null;
 
         JLabel backgroundLabel = new JLabel();

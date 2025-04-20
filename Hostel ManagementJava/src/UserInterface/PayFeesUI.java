@@ -119,3 +119,199 @@ public class PayFeesUI extends JFrame {
         paymentMethodCombo.setSelectedIndex(0);
     }
 }
+
+
+
+
+
+//package UserInterface;
+//
+//import Services.PaymentService;
+//import Services.Session;
+//import Validation.PaymentValidator;
+//
+//import javax.swing.*;
+//import java.awt.*;
+//import java.sql.SQLException;
+//
+//public class PayFeesUI extends JFrame {
+//    private JLabel pendingLabel;
+//    private JTextField amountField;
+//    private JComboBox<String> paymentMethodBox;
+//    private JPasswordField passwordField;
+//    private JButton payButton, resetButton;
+//
+//    private final PaymentService paymentService;
+//    private final PaymentValidator validator;
+//
+//    public PayFeesUI() {
+//        // Initialize services and validators
+//        this.paymentService = new PaymentService();
+//        this.validator = new PaymentValidator();
+//
+//        setTitle("Fee Payment System");
+//        setSize(1300, 700);
+//        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+//        setLocationRelativeTo(null);
+//
+//        // Load and set background image
+//        ImageIcon backgroundIcon;
+//        try {
+//            backgroundIcon = new ImageIcon("src/UI/h6.jpg");
+//            Image image = backgroundIcon.getImage();
+//            Image scaled = image.getScaledInstance(1300, 700, Image.SCALE_SMOOTH);
+//            backgroundIcon = new ImageIcon(scaled);
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(this, "Background image not found. Using default background.");
+//            getContentPane().setBackground(new Color(220, 225, 230));
+//            setLayout(null);
+//            initUIComponents();
+//            setVisible(true);
+//            return;
+//        }
+//
+//        JLabel backgroundLabel = new JLabel(backgroundIcon);
+//        backgroundLabel.setLayout(null);
+//        setContentPane(backgroundLabel);
+//
+//        initUIComponents();
+//        setVisible(true);
+//    }
+//
+//    private void initUIComponents() {
+//        // Panel to hold all fields centered
+//        JPanel panel = new JPanel(null);
+//        panel.setBounds(450, 100, 400, 300);
+//        panel.setOpaque(false); // transparent panel over background
+//        add(panel);
+//
+//        // Pending Amount
+//        pendingLabel = new JLabel("Pending Amount: ₹0.00", JLabel.CENTER);
+//        pendingLabel.setBounds(75, 0, 250, 25);
+//        pendingLabel.setFont(new Font("Arial", Font.BOLD, 16));
+//        panel.add(pendingLabel);
+//
+//        // Amount to Pay
+//        JLabel amountLabel = new JLabel("Amount to Pay:");
+//        amountLabel.setBounds(30, 50, 120, 25);
+//        amountLabel.setFont(new Font("Arial", Font.BOLD, 16));
+//        panel.add(amountLabel);
+//
+//        amountField = new JTextField();
+//        amountField.setBounds(160, 50, 180, 25);
+//        amountField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+//        panel.add(amountField);
+//
+//        // Payment Method
+//        JLabel methodLabel = new JLabel("Payment Method:");
+//        methodLabel.setBounds(30, 95, 120, 25);
+//        methodLabel.setFont(new Font("Arial", Font.BOLD, 16));
+//        panel.add(methodLabel);
+//
+//        String[] methods = {"Credit Card", "Debit Card", "UPI", "Net Banking"};
+//        paymentMethodBox = new JComboBox<>(methods);
+//        paymentMethodBox.setBounds(160, 95, 180, 25);
+//        panel.add(paymentMethodBox);
+//
+//        // Password
+//        JLabel passwordLabel = new JLabel("Password:");
+//        passwordLabel.setBounds(30, 140, 120, 25);
+//        passwordLabel.setFont(new Font("Arial", Font.BOLD, 16));
+//        panel.add(passwordLabel);
+//
+//        passwordField = new JPasswordField();
+//        passwordField.setBounds(160, 140, 180, 25);
+//        passwordField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+//        panel.add(passwordField);
+//
+//        // Pay Button
+//        payButton = new JButton("Pay Fees");
+//        payButton.setBounds(80, 200, 100, 30);
+//        payButton.setBackground(new Color(0, 102, 204));
+//        payButton.setForeground(Color.BLACK);
+//        payButton.setFocusPainted(false);
+//        panel.add(payButton);
+//
+//        // Reset Button
+//        resetButton = new JButton("Reset");
+//        resetButton.setBounds(210, 200, 100, 30);
+//        resetButton.setBackground(Color.GRAY);
+//        resetButton.setForeground(Color.black);
+//        resetButton.setFocusPainted(false);
+//        panel.add(resetButton);
+//
+//        // Action Listeners
+//        payButton.addActionListener(e -> processPayment());
+//        resetButton.addActionListener(e -> resetFields());
+//    }
+//
+//    private void processPayment() {
+//        String amountText = amountField.getText().trim();
+//        String password = new String(passwordField.getPassword()).trim();
+//
+//        // Validate Amount
+//        if (amountText.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please enter an amount.", "Input Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        try {
+//            double amount = Double.parseDouble(amountText);
+//            if (amount <= 0) {
+//                JOptionPane.showMessageDialog(this, "Please enter a valid amount greater than 0.", "Input Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(this, "Amount must be a number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        // Validate Password
+//        if (password.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please enter your password.", "Input Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        if (!validator.isValidPassword(password, Session.getUserPassword())) {
+//            JOptionPane.showMessageDialog(this, "Invalid password!");
+//            return;
+//        }
+//
+//        // Get Payment Method
+//        String method = (String) paymentMethodBox.getSelectedItem();
+//
+//        // Process Payment
+//        try {
+//            String studentId = Session.getUserId();
+//            double amount = Double.parseDouble(amountText);
+//            paymentService.processPayment(studentId, amount, method);
+//
+//            JOptionPane.showMessageDialog(this, "₹" + amountText + " paid via " + method + ".", "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+//            refreshPendingAmount();
+//            resetFields();
+//        } catch (SQLException | ClassNotFoundException e) {
+//            JOptionPane.showMessageDialog(this, "Payment failed: " + e.getMessage(), "Payment Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+//
+//    private void resetFields() {
+//        amountField.setText("");
+//        passwordField.setText("");
+//        paymentMethodBox.setSelectedIndex(0);
+//    }
+//
+//    private void refreshPendingAmount() {
+//        // Retrieve pending amount and update the label
+//        String studentId = Session.getUserId();
+//        try {
+//            double totalPending = paymentService.calculatePendingAmount(studentId);
+//            pendingLabel.setText(String.format("Pending Amount: ₹%.2f", totalPending));
+//        } catch (SQLException | ClassNotFoundException e) {
+//            JOptionPane.showMessageDialog(this, "Error loading pending amount: " + e.getMessage());
+//        }
+//    }
+//
+//    public void openpayfees() {
+//        SwingUtilities.invokeLater(() -> this.setVisible(true));
+//    }
+//}

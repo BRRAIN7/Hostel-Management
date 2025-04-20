@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.sql.SQLException;
 
 public class FeeController {
-    private static final PaymentValidator validator = new PaymentValidator();
+    public static final PaymentValidator validator = new PaymentValidator();
 
     public static void processPayment(float amt, String password, String studentId) {
         // Validate amount

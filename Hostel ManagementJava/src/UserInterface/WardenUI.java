@@ -332,7 +332,8 @@ public class WardenUI extends JFrame {
                         break;
                     case "Review Complaints":
                         System.out.println("Review Complaints button pressed");
-                        ReviewComplaintsUI.openComplaintReview();
+                        ReviewComplaintsUI rc = new ReviewComplaintsUI();
+                        rc.openComplaintReview();
                         break;
                     case "Review Outpass":
                         System.out.println("Review Outpass button pressed");
@@ -341,6 +342,8 @@ public class WardenUI extends JFrame {
                         break;
                     case "Logout":
                         System.out.println("Logout button pressed");
+                        this.dispose();
+                        LoginUI login = new LoginUI();
                         break;
                 }
             });

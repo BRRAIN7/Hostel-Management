@@ -326,7 +326,7 @@ public class ReviewOutpassUI extends JFrame {
         setLocationRelativeTo(null);
 
         // Background image
-        ImageIcon backgroundIcon = new ImageIcon("src/UI/h6.jpg");
+        ImageIcon backgroundIcon = new ImageIcon("src/UserInterface/h6.jpg");
         JLabel backgroundLabel = new JLabel(backgroundIcon);
         backgroundLabel.setLayout(new BorderLayout());
         setContentPane(backgroundLabel);

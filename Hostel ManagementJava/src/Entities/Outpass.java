@@ -9,24 +9,96 @@ public class Outpass {
     private Time departureTime;
     private Time returnTime;
     private String purpose;
+    private String status;
     private String applierId;
+    private String studentId;// Tracks the applicant (e.g., student) associated with the outpass
 
-    // Getters and setters
-    public String getOutpassId() { return outpassId; }
-    public void setOutpassId(String outpassId) { this.outpassId = outpassId; }
+    // Constructors
+    public Outpass() {
+    }
 
-    public Date getDateOfIssue() { return dateOfIssue; }
-    public void setDateOfIssue(Date dateOfIssue) { this.dateOfIssue = dateOfIssue; }
+    public Outpass(String outpassId, Date dateOfIssue, Time departureTime, Time returnTime,
+                   String purpose, String status) {
+        this.outpassId = outpassId;
+        this.dateOfIssue = dateOfIssue;
+        this.departureTime = departureTime;
+        this.returnTime = returnTime;
+        this.purpose = purpose;
+        this.status = status;
+    }
 
-    public Time getDepartureTime() { return departureTime; }
-    public void setDepartureTime(Time departureTime) { this.departureTime = departureTime; }
+    // Getters and Setters
+    public String getOutpassId() {
+        return outpassId;
+    }
 
-    public Time getReturnTime() { return returnTime; }
-    public void setReturnTime(Time returnTime) { this.returnTime = returnTime; }
+    public void setOutpassId(String outpassId) {
+        this.outpassId = outpassId;
+    }
 
-    public String getPurpose() { return purpose; }
-    public void setPurpose(String purpose) { this.purpose = purpose; }
+    public Date getDateOfIssue() {
+        return dateOfIssue;
+    }
 
-    public String getApplierId() { return applierId; }
-    public void setApplierId(String applierId) { this.applierId = applierId; }
+    public void setDateOfIssue(Date dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
+    }
+
+    public Time getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(Time departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public Time getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(Time returnTime) {
+        this.returnTime = returnTime;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getApplierId() {
+        return applierId;
+    }
+
+    public void setApplierId(String applierId) {
+        this.applierId = applierId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+    @Override
+    public String toString() {
+        return "Outpass{" +
+                "outpassId='" + outpassId + '\'' +
+                ", dateOfIssue=" + dateOfIssue +
+                ", departureTime=" + departureTime +
+                ", returnTime=" + returnTime +
+                ", purpose='" + purpose + '\'' +
+                ", status='" + status + '\'' +
+                ", applierId='" + applierId + '\'' +
+                '}';
+    }
+
+
 }
