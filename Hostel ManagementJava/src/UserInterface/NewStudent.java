@@ -506,16 +506,16 @@
 //        SwingUtilities.invokeLater(() -> this.setVisible(true));
 //    }
 //}
-
 package UserInterface;
 
 import DAO.RoomOperations;
+import DAO.StudentOperations;
 import Entities.Student;
 import Services.WardenController;
 
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.net.URL;
 
 public class NewStudent extends JFrame {
@@ -523,17 +523,13 @@ public class NewStudent extends JFrame {
     private JTextField nameField, aadharField, mobileField, dobField, admissionDateField, genderField, passwordField;
     private JTextArea addressArea;
     private JComboBox<String> roomComboBox;
+
     private void populateRoomDropdown() {
         RoomOperations roomOps = new RoomOperations();
         java.util.List<String> availableRooms = roomOps.fetchAvailableRooms();
 
-        // Clear the current items in the dropdown
         roomComboBox.removeAllItems();
-
-        // Add a blank option at the top
         roomComboBox.addItem("");
-
-        // Add available rooms to the dropdown
         for (String roomNo : availableRooms) {
             roomComboBox.addItem(roomNo);
         }
@@ -560,17 +556,15 @@ public class NewStudent extends JFrame {
         setContentPane(backgroundLabel);
         backgroundLabel.setLayout(new GridBagLayout());
 
-        // Center form panel
         JPanel formPanel = new JPanel();
         formPanel.setPreferredSize(new Dimension(550, 600));
         formPanel.setLayout(new GridBagLayout());
-        formPanel.setBackground(new Color(245, 245, 245, 200)); // Light grey with some transparency
+        formPanel.setBackground(new Color(245, 245, 245, 200));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Title
         JLabel titleLabel = new JLabel("Add New Student");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         titleLabel.setForeground(new Color(60, 60, 60));
@@ -582,11 +576,36 @@ public class NewStudent extends JFrame {
 
         int row = 1;
         nameField = addRow("Name", row++, formPanel, gbc);
-        aadharField = addRow("Aadhar No.", row++, formPanel, gbc);
+
+        // Student ID (auto-generated, read-only)
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        JLabel idLabel = new JLabel("Student ID");
+        idLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        idLabel.setForeground(Color.DARK_GRAY);
+        formPanel.add(idLabel, gbc);
+
+        gbc.gridx = 1;
+        aadharField = new JTextField();
+        aadharField.setFont(new Font("Arial", Font.PLAIN, 15));
+        aadharField.setPreferredSize(new Dimension(250, 30));
+        aadharField.setEditable(false);  // Make the field read-only
+        formPanel.add(aadharField, gbc);
+
+        // Generate ID and display it
+        try {
+            String newStudentId = StudentOperations.generateNextStudentID();
+            aadharField.setText(newStudentId);
+        } catch (Exception e) {
+            aadharField.setText("ErrorGeneratingID");
+            JOptionPane.showMessageDialog(this, "Failed to generate Student ID.");
+        }
+
+        row++;
+
         mobileField = addRow("Mobile No.", row++, formPanel, gbc);
         dobField = addRow("DOB", row++, formPanel, gbc);
 
-        // Address (textarea)
         gbc.gridx = 0;
         gbc.gridy = row;
         JLabel addressLabel = new JLabel("Address");
@@ -608,7 +627,6 @@ public class NewStudent extends JFrame {
         genderField = addRow("Gender", row++, formPanel, gbc);
         passwordField = addRow("Set Password", row++, formPanel, gbc);
 
-        // Room No. as dropdown
         gbc.gridx = 0;
         gbc.gridy = row;
         JLabel roomLabel = new JLabel("Room No.");
@@ -624,7 +642,6 @@ public class NewStudent extends JFrame {
         populateRoomDropdown();
         row++;
 
-        // Buttons
         gbc.gridx = 0;
         gbc.gridy = row;
         JButton resetBtn = createStyledButton("Reset", this::resetForm);
@@ -671,7 +688,6 @@ public class NewStudent extends JFrame {
 
     private void resetForm(ActionEvent e) {
         nameField.setText("");
-        aadharField.setText("");
         mobileField.setText("");
         dobField.setText("");
         addressArea.setText("");
@@ -680,10 +696,10 @@ public class NewStudent extends JFrame {
         passwordField.setText("");
         roomComboBox.setSelectedIndex(0);
     }
+
     private void handleSubmit(ActionEvent e) {
-        // Extract data from input fields
         String name = nameField.getText().trim();
-        String id = aadharField.getText().trim(); // Assuming 'id' is Aadhar number
+        String id = aadharField.getText().trim();  // Auto-generated, already filled
         String gender = genderField.getText().trim();
         String dob = dobField.getText().trim();
         String admissionDate = admissionDateField.getText().trim();
@@ -692,7 +708,6 @@ public class NewStudent extends JFrame {
         String password = passwordField.getText().trim();
         String selectedRoom = (String) roomComboBox.getSelectedItem();
 
-        // Validate fields
         if (name.isEmpty() || id.isEmpty() || gender.isEmpty() || dob.isEmpty() ||
                 admissionDate.isEmpty() || contactNumber.isEmpty() || address.isEmpty() ||
                 password.isEmpty() || selectedRoom == null || selectedRoom.trim().isEmpty()) {
@@ -701,17 +716,11 @@ public class NewStudent extends JFrame {
             return;
         }
 
-        // Create Student object (assuming your Student constructor is like this)
         Student student = new Student(name, id, gender, dob, admissionDate, contactNumber, address, password, selectedRoom);
-
-        // Call controller method to add the student
         WardenController.addNewStudent(student, this);
     }
 
-
-
     public void openEnrollStudent() {
-
         SwingUtilities.invokeLater(() -> this.setVisible(true));
     }
 }

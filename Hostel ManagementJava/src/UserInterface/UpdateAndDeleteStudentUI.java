@@ -426,7 +426,6 @@
 //    private javax.swing.JTextField jTextField6;
 //    // End of variables declaration//GEN-END:variables
 //}
-
 package UserInterface;
 
 import DAO.RoomOperations;
@@ -440,7 +439,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.ArrayList;
 
 public class UpdateAndDeleteStudentUI extends JFrame {
     private Student currentStudent = null;
@@ -448,37 +446,31 @@ public class UpdateAndDeleteStudentUI extends JFrame {
     private JComboBox<String> roomBox;
     private JTable table;
     private JTextField searchField;
+
     private void populateRoomDropdown() {
         RoomOperations roomOps = new RoomOperations();
         List<String> availableRooms = roomOps.fetchAvailableRooms();
-
-        // Clear current items
         roomBox.removeAllItems();
-
-        // Populate dropdown
         for (String roomNo : availableRooms) {
             roomBox.addItem(roomNo);
         }
     }
+
     private void searchStudentById(String studentId) {
         StudentController controller = new StudentController();
         Student student = controller.getStudentDetails(studentId);
 
         if (student != null) {
-            currentStudent = student; // ← Add this
+            currentStudent = student;
             nameField.setText(student.getName());
             genderField.setText(student.getGender());
             contactField.setText(student.getContactNumber());
             addressField.setText(student.getAddress());
-            passwordField.setText(""); // Blank password for security
+            passwordField.setText("");
             roomBox.setSelectedItem(student.getroomno());
         } else {
             JOptionPane.showMessageDialog(this, "Student not found.");
         }
-    }
-
-    private void resetForm() {
-        resetFields();
     }
 
     public UpdateAndDeleteStudentUI() {
@@ -487,20 +479,30 @@ public class UpdateAndDeleteStudentUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Load background image
+        ImageIcon backgroundImg = new ImageIcon("src/UserInterface/h6.jpg"); // Replace with your path
 
-        JPanel panel = new JPanel();
-        panel.setOpaque(false);
+        // Custom panel with background
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImg.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
         panel.setLayout(null);
         add(panel);
 
         JLabel title = new JLabel("Manage Students", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setBounds(500, 10, 300, 30);
+        title.setForeground(Color.BLACK);
         panel.add(title);
 
-        // Search section
         JLabel searchLabel = new JLabel("Search Student");
         searchLabel.setBounds(200, 50, 120, 25);
+        searchLabel.setForeground(Color.BLACK);
         panel.add(searchLabel);
 
         searchField = new JTextField();
@@ -513,7 +515,6 @@ public class UpdateAndDeleteStudentUI extends JFrame {
 
         searchButton.addActionListener(e -> handleSearch());
 
-        // Table
         String[] columnNames = {"Student ID", "Name", "Gender", "Contact", "Address", "Room Number"};
         table = new JTable(new DefaultTableModel(columnNames, 0));
         JScrollPane tableScroll = new JScrollPane(table);
@@ -522,6 +523,7 @@ public class UpdateAndDeleteStudentUI extends JFrame {
 
         JLabel detailsLabel = new JLabel("Selected Student Details");
         detailsLabel.setBounds(100, 200, 200, 25);
+        detailsLabel.setForeground(Color.BLACK);
         panel.add(detailsLabel);
 
         int labelX = 100, fieldX = 250, y = 230, height = 25, gap = 35;
@@ -534,12 +536,12 @@ public class UpdateAndDeleteStudentUI extends JFrame {
 
         JLabel roomLabel = new JLabel("Room number");
         roomLabel.setBounds(labelX, y, 100, height);
+        roomLabel.setForeground(Color.BLACK);
         roomBox = new JComboBox<>(new String[]{"101", "102", "103", "104"});
         roomBox.setBounds(fieldX, y, 150, height);
         panel.add(roomLabel);
         panel.add(roomBox);
 
-        // Buttons
         JButton updateButton = new JButton("Update Details");
         updateButton.setBounds(450, 230, 150, 25);
         updateButton.addActionListener(e -> handleUpdate());
@@ -554,19 +556,22 @@ public class UpdateAndDeleteStudentUI extends JFrame {
         deleteButton.setBounds(450, 310, 150, 25);
         deleteButton.addActionListener(e -> handleDelete());
         panel.add(deleteButton);
+
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 int row = table.rowAtPoint(evt.getPoint());
-                String studentId = table.getValueAt(row, 0).toString(); // Get student ID
+                String studentId = table.getValueAt(row, 0).toString();
                 searchStudentById(studentId);
             }
         });
+
         populateRoomDropdown();
     }
 
     private JTextField createField(JPanel panel, String label, int labelX, int fieldX, int y) {
         JLabel jLabel = new JLabel(label);
         jLabel.setBounds(labelX, y, 100, 25);
+        jLabel.setForeground(Color.BLACK);
         JTextField jField = new JTextField();
         jField.setBounds(fieldX, y, 150, 25);
         panel.add(jLabel);
@@ -583,10 +588,10 @@ public class UpdateAndDeleteStudentUI extends JFrame {
 
         try {
             StudentOperations so = new StudentOperations();
-            java.util.List<Student> students = so.searchStudent(query);
+            List<Student> students = so.searchStudent(query);
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setRowCount(0); // Clear existing data
+            model.setRowCount(0);
 
             for (Student s : students) {
                 model.addRow(new Object[]{
@@ -661,3 +666,4 @@ public class UpdateAndDeleteStudentUI extends JFrame {
         SwingUtilities.invokeLater(() -> new UpdateAndDeleteStudentUI().setVisible(true));
     }
 }
+

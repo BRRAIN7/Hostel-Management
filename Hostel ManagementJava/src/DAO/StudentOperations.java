@@ -10,7 +10,27 @@ import java.util.List;
 
 public class StudentOperations {
 
-    // Verify student or warden credentials
+    public static String generateNextStudentID() {
+        String nextID = "S001";
+
+        try (Connection con = DBController.connect();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT Student_ID FROM student ORDER BY Student_ID DESC LIMIT 1")) {
+
+            if (rs.next()) {
+                String lastId = rs.getString("Student_ID");
+                int num = Integer.parseInt(lastId.substring(1)); // Skip 'S'
+                num++;
+                nextID = String.format("S%03d", num); // Format: S007, S008...
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return nextID;
+    }
+
     public String studentVerify(String username, String password) throws SQLException, ClassNotFoundException {
         DBController db = new DBController();
 
@@ -132,7 +152,10 @@ public class StudentOperations {
         String sqlDeleteFromStays = "DELETE FROM stays WHERE Student_ID = ?";
         String sqlDeleteStudent = "DELETE FROM student WHERE Student_ID = ?";
         String sqlUpdateRoomCapacity = "UPDATE room SET remaining_capacity = remaining_capacity + 1 WHERE Room_ID = (SELECT Room_ID FROM stays WHERE Student_ID = ?)";
+        String sqlDeleteFromFee = "DELETE FROM fee WHERE Fee_ID = ?";
 
+        // Convert Student_ID to Fee_ID
+        String feeId = "F" + studentId.substring(1); // e.g., S004 -> F004
 
         Connection conn = DBController.connect();
         conn.setAutoCommit(false); // Start transaction
@@ -147,6 +170,12 @@ public class StudentOperations {
             // Delete from stays table
             try (PreparedStatement ps = conn.prepareStatement(sqlDeleteFromStays)) {
                 ps.setString(1, studentId);
+                ps.executeUpdate();
+            }
+
+            // Delete from fee table
+            try (PreparedStatement ps = conn.prepareStatement(sqlDeleteFromFee)) {
+                ps.setString(1, feeId);
                 ps.executeUpdate();
             }
 

@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package UserInterface;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
-/**
- *
- * @author karole
- */
 public class StudentUI extends javax.swing.JFrame {
+
+    private BufferedImage bgImage;
 
     /**
      * Creates new form StudentUI
@@ -32,90 +31,121 @@ public class StudentUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton(); // Added logout button
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1300, 700));
+        setSize(1300, 700); // Ensure window size is set
 
+        // Load background image with error handling
+        try {
+            File imageFile = new File("src/UserInterface/h6.jpg");
+            if (imageFile.exists()) {
+                bgImage = ImageIO.read(imageFile);
+            } else {
+                throw new IOException("Background image not found.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error loading background image.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Set custom panel with background
+        setContentPane(new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (bgImage != null) {
+                    g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        });
+
+        // Center the label
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome Student ");
+        jLabel1.setFont(new Font("Arial", Font.BOLD, 22));
 
+        // Set button properties
         jButton1.setText("Pay Fees");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(evt -> jButton1ActionPerformed(evt));
 
         jButton2.setText("Apply for Outpass");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(evt -> jButton2ActionPerformed(evt));
 
         jButton3.setText("File a complaint");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(evt -> jButton3ActionPerformed(evt));
 
+        jButton4.setText("Logout");
+        jButton4.addActionListener(evt -> jButton4ActionPerformed(evt));
+
+        // Layout code
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
+
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(55, 55, 55)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 400, Short.MAX_VALUE) // Move buttons to the center
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(1077, Short.MAX_VALUE))
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 400, Short.MAX_VALUE)
+                        )
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
+                                .addGap(60, 60, 60)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(74, 74, 74)
+                                .addGap(100, 100, 100)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(72, 72, 72)
+                                .addGap(40, 40, 40)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(73, 73, 73)
+                                .addGap(40, 40, 40)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(350, Short.MAX_VALUE))
+                                .addGap(40, 40, 40)
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(130, Short.MAX_VALUE)
+                        )
         );
 
         pack();
     }// </editor-fold>
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         // Create an instance of PayFeesUI
         PayFeesUI payFeesUI = new PayFeesUI();
 
         // Set it visible to show the UI screen
         payFeesUI.setVisible(true);
-
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        ApplyOutpass ao= new ApplyOutpass();
+        ApplyOutpass ao = new ApplyOutpass();
         ao.openApplyOutpass();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        FileComplaintUI fc= new FileComplaintUI();
+        FileComplaintUI fc = new FileComplaintUI();
         fc.openFileComplaint();
     }
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        // Handle logout functionality
+        this.dispose(); // Close the current window
+
+        // Open login screen again
+        LoginUI login = new LoginUI();
+        login.setVisible(true);
+    }
+
     /**
-     *
+     * Method to show Student UI
      */
     public void showStudentUi() {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
+        // Set the Nimbus look and feel
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -123,18 +153,11 @@ public class StudentUI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StudentUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
+        // Create and display the form
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new StudentUI().setVisible(true);
@@ -146,109 +169,7 @@ public class StudentUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4; // Added logout button declaration
     private javax.swing.JLabel jLabel1;
     // End of variables declaration
 }
-
-
-
-//
-//package UserInterface;
-//
-//import Entities.Student;
-//
-//import javax.swing.*;
-//        import java.awt.*;
-//        import java.net.URL;
-//
-//public class StudentUI extends JFrame {
-//
-//    public StudentUI() {
-//        setTitle("Student Dashboard");
-//        setSize(1300, 700);
-//        setLocationRelativeTo(null);
-//        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//
-//        // Try loading background image from the classpath
-//        URL imageUrl = getClass().getResource("/UserInterface/h6.jpg");
-//        ImageIcon backgroundIcon = null;
-//
-//        if (imageUrl != null) {
-//            backgroundIcon = new ImageIcon(imageUrl);
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Background image not found.\nPlease ensure 'h6.jpg' is in the UI package.",
-//                    "Image Load Error", JOptionPane.WARNING_MESSAGE);
-//        }
-//
-//        // Set content pane with the background image
-//        JLabel backgroundLabel = new JLabel();
-//        if (backgroundIcon != null) {
-//            backgroundLabel.setIcon(backgroundIcon);
-//        } else {
-//            backgroundLabel.setOpaque(true);
-//            backgroundLabel.setBackground(Color.LIGHT_GRAY); // fallback color if image not found
-//        }
-//
-//        setContentPane(backgroundLabel);
-//        backgroundLabel.setLayout(new GridBagLayout());
-//
-//        // Transparent center panel
-//        JPanel centerPanel = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                g.setColor(new Color(255, 255, 255, 220));
-//                g.fillRect(0, 0, getWidth(), getHeight());
-//            }
-//        };
-//        centerPanel.setPreferredSize(new Dimension(300, 350));
-//        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-//        centerPanel.setOpaque(false);
-//
-//        // Welcome label
-//        JLabel title = new JLabel("Welcome Student");
-//        title.setFont(new Font("Serif", Font.BOLD, 22));
-//        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        title.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
-//        centerPanel.add(title);
-//
-//        // Buttons
-//        centerPanel.add(createStyledButton("Pay Fee"));
-//        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        centerPanel.add(createStyledButton("Apply Outpass"));
-//        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        centerPanel.add(createStyledButton("File Complaint"));
-//        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        centerPanel.add(createStyledButton("Logout"));
-//
-//        // Add center panel to background
-//        backgroundLabel.add(centerPanel);
-//
-//        setVisible(true);
-//    }
-//
-//    private JButton createStyledButton(String text) {
-//        JButton button = new JButton(text);
-//        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        button.setMaximumSize(new Dimension(200, 45));
-//        button.setFont(new Font("Arial", Font.BOLD, 16));
-//        button.setBackground(new Color(255, 140, 0));
-//        button.setForeground(Color.ORANGE);
-//        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//        button.setFocusPainted(false);
-//        button.setBorder(BorderFactory.createCompoundBorder(
-//                BorderFactory.createLineBorder(Color.GRAY),
-//                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-//        ));
-//
-//        // Optional: add basic action
-//        button.addActionListener(e -> JOptionPane.showMessageDialog(this,
-//                text + " button clicked!", "Info", JOptionPane.INFORMATION_MESSAGE));
-//
-//        return button;
-//    }
-//
-//    public void showStudentUi() {
-//        SwingUtilities.invokeLater(()->this.setVisible(true));
-//    }
-//}

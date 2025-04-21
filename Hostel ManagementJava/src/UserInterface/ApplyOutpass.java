@@ -363,7 +363,7 @@ public class ApplyOutpass extends JFrame {
         departureField.setBounds(centerX + 10, baseY, fieldWidth, 25);
         add(departureField);
 
-        JLabel returnLabel = new JLabel("Return Date:");
+        JLabel returnLabel = new JLabel("Return Time:");
         returnLabel.setBounds(centerX - labelWidth - 10, baseY + spacingY, labelWidth, 25);
         add(returnLabel);
 

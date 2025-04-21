@@ -5,7 +5,11 @@ import Services.Session;
 import Validation.PaymentValidator;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.sql.SQLException;
 
 public class PayFeesUI extends JFrame {
@@ -25,15 +29,34 @@ public class PayFeesUI extends JFrame {
         this.paymentService = new PaymentService();
         this.validator = new PaymentValidator();
 
+        try {
+            ImagePanel backgroundPanel = new ImagePanel("src/UserInterface/h6.jpg"); // Adjust path if needed
+            backgroundPanel.setLayout(new BoxLayout(backgroundPanel, BoxLayout.Y_AXIS));
+            backgroundPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            setContentPane(backgroundPanel);
+        } catch (Exception e) {
+            // Fallback if image fails
+            JPanel fallback = new JPanel();
+            fallback.setLayout(new BoxLayout(fallback, BoxLayout.Y_AXIS));
+            fallback.setBackground(new Color(230, 230, 230));
+            fallback.setBorder(new EmptyBorder(20, 20, 20, 20));
+            setContentPane(fallback);
+
+            JOptionPane.showMessageDialog(this,
+                    "Failed to load background image: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
         initComponents();
         setupUI();
     }
 
     private void initComponents() {
         setTitle("Fee Payment System");
-        setSize(600, 400);
+        setSize(1300, 700);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        setLocationRelativeTo(null);
 
         pendingAmountLabel = new JLabel("Loading pending amount...");
         amountTextField = new JTextField(10);
@@ -42,30 +65,91 @@ public class PayFeesUI extends JFrame {
         payButton = new JButton("Pay Fees");
         resetButton = new JButton("Reset");
 
+        // Set text color to black
+        pendingAmountLabel.setForeground(Color.BLACK);
+        amountTextField.setForeground(Color.BLACK);
+        passwordField.setForeground(Color.BLACK);
+        payButton.setForeground(Color.WHITE);
+        resetButton.setForeground(Color.WHITE);
+
+        // Apply rounded corners and customize text fields and buttons
+        amountTextField.setBorder(new LineBorder(Color.GRAY, 1, true));
+        passwordField.setBorder(new LineBorder(Color.GRAY, 1, true));
+        payButton.setBorder(new LineBorder(Color.GRAY, 2, true));
+        resetButton.setBorder(new LineBorder(Color.GRAY, 2, true));
+
+        // Set background colors and fonts
+        amountTextField.setBackground(new Color(240, 240, 240));
+        passwordField.setBackground(new Color(240, 240, 240));
+        payButton.setBackground(new Color(56, 142, 60)); // Green button
+        resetButton.setBackground(new Color(244, 67, 54)); // Red button
+
+        payButton.setFont(new Font("Arial", Font.BOLD, 14));
+        resetButton.setFont(new Font("Arial", Font.BOLD, 14));
+        amountTextField.setFont(new Font("Arial", Font.PLAIN, 14));
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        // Add hover effect for buttons
+        payButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                payButton.setBackground(new Color(46, 125, 50)); // Darker green on hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                payButton.setBackground(new Color(56, 142, 60)); // Original green
+            }
+        });
+
+        resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                resetButton.setBackground(new Color(229, 57, 53)); // Darker red on hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                resetButton.setBackground(new Color(244, 67, 54)); // Original red
+            }
+        });
+
+        // Panels with transparency
         JPanel panel1 = new JPanel();
-        panel1.add(new JLabel("Pending Amount:"));
+        panel1.setOpaque(false);
+        JLabel label1 = new JLabel("Pending Amount:");
+        label1.setForeground(Color.BLACK);
+        panel1.add(label1);
         panel1.add(pendingAmountLabel);
 
         JPanel panel2 = new JPanel();
-        panel2.add(new JLabel("Amount to Pay:"));
+        panel2.setOpaque(false);
+        JLabel label2 = new JLabel("Amount to Pay:");
+        label2.setForeground(Color.BLACK);
+        panel2.add(label2);
         panel2.add(amountTextField);
 
         JPanel panel3 = new JPanel();
-        panel3.add(new JLabel("Payment Method:"));
+        panel3.setOpaque(false);
+        JLabel label3 = new JLabel("Payment Method:");
+        label3.setForeground(Color.BLACK);
+        panel3.add(label3);
         panel3.add(paymentMethodCombo);
 
         JPanel panel4 = new JPanel();
-        panel4.add(new JLabel("Password:"));
+        panel4.setOpaque(false);
+        JLabel label4 = new JLabel("Password:");
+        label4.setForeground(Color.BLACK);
+        panel4.add(label4);
         panel4.add(passwordField);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
         buttonPanel.add(payButton);
         buttonPanel.add(resetButton);
 
         add(panel1);
+        add(Box.createRigidArea(new Dimension(0, 10)));
         add(panel2);
+        add(Box.createRigidArea(new Dimension(0, 10)));
         add(panel3);
+        add(Box.createRigidArea(new Dimension(0, 10)));
         add(panel4);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(buttonPanel);
 
         payButton.addActionListener(this::handlePayment);
@@ -118,7 +202,32 @@ public class PayFeesUI extends JFrame {
         passwordField.setText("");
         paymentMethodCombo.setSelectedIndex(0);
     }
+
+    // Custom JPanel class that paints a background image
+    class ImagePanel extends JPanel {
+        private Image backgroundImage;
+
+        public ImagePanel(String imagePath) throws Exception {
+            File file = new File(imagePath);
+            if (!file.exists()) {
+                throw new Exception("Background image not found: " + imagePath);
+            }
+
+            backgroundImage = new ImageIcon(imagePath).getImage();
+            if (backgroundImage.getWidth(null) <= 0 || backgroundImage.getHeight(null) <= 0) {
+                throw new Exception("Invalid or corrupted image file.");
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 }
+
+
 
 
 
