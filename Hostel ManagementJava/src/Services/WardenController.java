@@ -20,7 +20,7 @@ public class WardenController {
             return;
         }
         if (!StudentValidation.isValidDOB(S.getDob())) {
-            JOptionPane.showMessageDialog(null, "Invalid Date of Birth. Please use the format 'yyyy-mm-dd'.");
+            JOptionPane.showMessageDialog(null, "Invalid Date of Birth. Please use the format 'yyyy-mm-dd' and age should be above 18");
             return;
         }
         if (!StudentValidation.isValidDateOfAdmission(S.getAdmissionDate())) {

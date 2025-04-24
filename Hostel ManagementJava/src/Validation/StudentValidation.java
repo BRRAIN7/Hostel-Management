@@ -1,4 +1,10 @@
 package Validation;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class StudentValidation {
     public static boolean isValidName(String name) {
         return name != null && !name.trim().isEmpty() && name.matches("[a-zA-Z ]+");
@@ -10,7 +16,17 @@ public class StudentValidation {
         return gender != null && (gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"));
     }
     public static boolean isValidDOB(String DOB) {
-        return DOB != null && DOB.matches("\\d{4}-\\d{2}-\\d{2}"); // Check for 'yyyy-mm-dd' format
+        if (DOB == null || !DOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return false;
+        }
+        try {
+            LocalDate dobDate = LocalDate.parse(DOB, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate today = LocalDate.now();
+            Period age = Period.between(dobDate, today);
+            return age.getYears() >= 18;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
     public static boolean isValidDateOfAdmission(String date_of_admission) {
         return date_of_admission != null && date_of_admission.matches("\\d{4}-\\d{2}-\\d{2}"); // Check for 'yyyy-mm-dd' format

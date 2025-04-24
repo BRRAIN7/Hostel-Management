@@ -263,6 +263,7 @@ import java.util.List;
 public class ReviewComplaintsUI extends JFrame {
     private BufferedImage bgImage;
     private JTable jTable1;
+
     private void loadComplaintsIntoTable() {
         try {
             ComplaintController controller = new ComplaintController();
@@ -295,7 +296,6 @@ public class ReviewComplaintsUI extends JFrame {
         setLocationRelativeTo(null);
 
         // Load background image with error handling
-        // Load background image with error handling
         try {
             URL imageUrl = getClass().getResource("/UserInterface/h6.jpg");
             if (imageUrl != null) {
@@ -305,9 +305,7 @@ public class ReviewComplaintsUI extends JFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Background image could not be loaded!", "Error", JOptionPane.ERROR_MESSAGE);
-
         }
-
 
         BackgroundPanel backgroundPanel = new BackgroundPanel(bgImage);
         backgroundPanel.setLayout(new BorderLayout());
@@ -350,6 +348,39 @@ public class ReviewComplaintsUI extends JFrame {
 
         JButton saveButton = new JButton("Save");
         JButton resetButton = new JButton("Reset");
+
+        // ✅ Save Button Logic with validation and update
+        saveButton.addActionListener(e -> {
+            String complaintId = complaintIdField.getText().trim();
+            String resolution = resolutionField.getText().trim();
+            String status = statusField.getText().trim();
+
+            // ✅ Validate status
+            if (!status.equalsIgnoreCase("Pending") && !status.equalsIgnoreCase("Resolved")) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Status must be either 'Pending' or 'Resolved'.",
+                        "Invalid Status",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            // ✅ Call service to update
+            ComplaintController service = new ComplaintController();
+            String result = service.updateComplaint(complaintId, status, resolution);
+
+            // ✅ Show result and refresh table
+            JOptionPane.showMessageDialog(this, result);
+            loadComplaintsIntoTable();
+        });
+
+        // 🔁 Reset button clears the fields
+        resetButton.addActionListener(e -> {
+            complaintIdField.setText("");
+            resolutionField.setText("");
+            statusField.setText("");
+        });
 
         formPanel.add(complaintIdLabel);
         formPanel.add(complaintIdField);
@@ -396,10 +427,8 @@ public class ReviewComplaintsUI extends JFrame {
         }
     }
 
-
-
     public void openComplaintReview() {
-        SwingUtilities.invokeLater(()->this.setVisible(true));
-
+        SwingUtilities.invokeLater(() -> this.setVisible(true));
     }
 }
+
